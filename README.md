@@ -2,11 +2,13 @@
 
 ### Install Dependencies
 
-. Install Morse
-. Install ROS1
-. Install Aditional Dependencies
+* Install ROS1
+ http://wiki.ros.org/kinetic/Installation/Ubuntu
+* Install Aditional Dependencies
+* Install Morse
 
 ```console
+sudo apt install morse-simulator
 sudo apt install ros-melodic-navigation ros-melodic-navigation 
 ```
 
