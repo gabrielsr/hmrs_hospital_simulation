@@ -42,11 +42,11 @@ morse run morse_hospital_sim
 3. Start ros robots controllers
 
 #### Initing ros robot controllers
- # cd .. 
- export ROS_PATH...
- # 
- ros run motion_ctrl sim.launch 
- ros run motion_ctrl base_navigation.launch 
+```console
+export ROS_PACKAGE_PATH=$ROS_PACKAGE_PATH:`pwd`
+roslaunch motion_ctrl sim.launch 
+roslaunch motion_ctrl base_navigation.launch
+```
 
 
 ## Troubleshooting
