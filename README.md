@@ -2,9 +2,9 @@
 
 ## Install Dependencies
 
-Install Morse
-Install ROS1
-Install Aditional Dependencies
+.Install Morse
+.Install ROS1
+.Install Aditional Dependencies
 ```console
 sudo apt install ros-melodic-navigation ros-melodic-navigation 
 ```
