@@ -35,3 +35,6 @@ For executing the simulation you need to
 ## Troubleshooting
 . Command 'roscore' not found, but can be installed with:
   Check if you had executed 'initros' in the current terminal.
+
+. No module named 'rospy' error in the beginning of the simulation.
+  Check if you had executed 'initros' in the current terminal.
