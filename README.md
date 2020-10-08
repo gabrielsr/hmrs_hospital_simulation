@@ -1,15 +1,16 @@
 # hmrs_hostpital_sim_morse
 
-## Install Dependencies
+### Install Dependencies
 
-.Install Morse
-.Install ROS1
-.Install Aditional Dependencies
+. Install Morse
+. Install ROS1
+. Install Aditional Dependencies
+
 ```console
 sudo apt install ros-melodic-navigation ros-melodic-navigation 
 ```
 
-## Setup Environment
+### Setup Environment
 Import simulation 
 ```console
  morse import morse_hospital_sim
@@ -24,7 +25,7 @@ git clone ....
 
 ```
 
-## Execution
+### Execution
 For executing the simulation you need to 
 1. In a terminal setup ros1 with 'initros' and then start 'roscore'
 ```console
@@ -40,7 +41,7 @@ morse run morse_hospital_sim
 ```
 3. Start ros robots controllers
 
-### Initing ros robot controllers
+#### Initing ros robot controllers
  # cd .. 
  export ROS_PATH...
  # 
