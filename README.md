@@ -16,10 +16,13 @@ git clone ....
 
 ## Execution
 For executing the simulation you need to 
-1. Start a roscore
-2. Init simulation
- morse run morse_hospital_sim
-3. start ros robots controllers
+1. In a terminal setup ros1 with 'initros'and then start 'roscore'
+
+2. start ros robots controllers
+
+3. In a another tertminal init the simulation
+
+  morse run morse_hospital_sim
 
 ### Initing ros robot controllers
  # cd .. 
@@ -30,3 +33,5 @@ For executing the simulation you need to
 
 
 ## Troubleshooting
+. Command 'roscore' not found, but can be installed with:
+  Check if you had executed 'initros' in the current terminal.
