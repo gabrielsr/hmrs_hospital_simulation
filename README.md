@@ -8,7 +8,7 @@
 * Install Morse
 
 ```console
-sudo apt install morse-simulator
+sudo apt install morse-simulator python3-morse-simulator
 sudo apt install ros-melodic-navigation ros-melodic-navigation 
 ```
 
