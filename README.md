@@ -1,23 +1,27 @@
 # hmrs_hostpital_sim_morse
 
-# Setup Dependencies
+## Install Dependencies
 ros version m
 sudo apt install ros-melodic-navigation
 turtlebot3
 pip install 
 
-# 
+## Setup Environment
+Import simulation 
+ morse import morse_hospital_sim
+
+Clone motion_ctrl
+git clone ....
+
+
+## Execution
 For executing the simulation you need to 
 1. Start a roscore
- `initros`
- `roscore`
-2. Init simulator (you need to have it imported with 'morse import')
+2. Init simulation
  morse run morse_hospital_sim
-3. start clients see
+3. start ros robots controllers
 
-
-# Simulation Single Robot in the Host Machine
- morse import morse_hospital_sim
+### Initing ros robot controllers
  # cd .. 
  export ROS_PATH...
  # 
@@ -25,3 +29,4 @@ For executing the simulation you need to
  ros run motion_ctrl base_navigation.launch 
 
 
+## Troubleshooting
