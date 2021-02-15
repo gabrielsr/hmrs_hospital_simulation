@@ -23,10 +23,10 @@ robot2 = Turtlebot(name='turtlebot2')
 robot2.add_to_simulation(x=1, y=0)
 
 #door1 = Door(turn_angle=pi/2, x=0, y=0, z_rot=pi/2)
-door1 = Door(turn_angle=pi/2, x=0.56, y=-0.95, z_rot=pi/2, name="door1")
-door2 = Door(turn_angle=pi/2, x=1.56, y=-0.95, z_rot=pi/2, name="door2")
-door3 = Door(turn_angle=pi/2, x=-0.44, y=-0.95, z_rot=pi/2, name="door3")
-door4 = Door(turn_angle=pi/2, x=-1.39, y=-0.95, z_rot=pi/2, name="door4")
+# door1 = Door(turn_angle=pi/2, x=0.56, y=-0.95, z_rot=pi/2, name="door1")
+# door2 = Door(turn_angle=pi/2, x=1.56, y=-0.95, z_rot=pi/2, name="door2")
+# door3 = Door(turn_angle=pi/2, x=-0.44, y=-0.95, z_rot=pi/2, name="door3")
+# door4 = Door(turn_angle=pi/2, x=-1.39, y=-0.95, z_rot=pi/2, name="door4")
 
 # Charging Zone
 charging_zone = Zone(type='Charging')
@@ -36,5 +36,5 @@ charging_zone.translate(x=-1, y=-1, z=0)
 # set 'fastmode' to True to switch to wireframe mode
 env = Environment(f'{PATH}/models/Hospital.blend', fastmode=False)
 env.set_horizon_color(color=(0.65, 0.65, 0.65))
-env.set_camera_location([-3.0, -10, 5.0])
-env.set_camera_rotation([1.09, 0, -0.7])
+env.set_camera_location([-3.0, -10, 20])
+env.set_camera_rotation([1.09, 0, -1.27])
