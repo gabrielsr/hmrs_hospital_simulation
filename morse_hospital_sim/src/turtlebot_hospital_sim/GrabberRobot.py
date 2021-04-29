@@ -1,6 +1,6 @@
 from morse.builder import *
-from Turtlebot import Turtlebot
-from ItemExchanger import ItemExchanger
+from turtlebot_hospital_sim.Turtlebot import Turtlebot
+from turtlebot_hospital_sim.ItemExchanger import ItemExchanger
 
 class GrabberRobot(Turtlebot):
     def __init__(self, name, path):

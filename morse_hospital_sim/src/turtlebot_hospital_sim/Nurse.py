@@ -1,5 +1,5 @@
 from morse.builder import *
-from ItemExchanger import ItemExchanger
+from turtlebot_hospital_sim.ItemExchanger import ItemExchanger
 
 class Nurse(Human):
     def __init__(self, name, path='human_rig'):

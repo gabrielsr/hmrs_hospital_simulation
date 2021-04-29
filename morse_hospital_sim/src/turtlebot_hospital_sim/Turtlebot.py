@@ -1,4 +1,5 @@
 from morse.builder import *
+from turtlebot_hospital_sim.BatterySensor import BatterySensor
 
 
 PATH = "/".join(__file__.split("/")[:-3])
@@ -53,7 +54,4 @@ class Turtlebot(Robot):
         self.odometry.add_interface('ros', topic=f"{self.name}/odom", frame_id=f"odom", child_frame_id=f"base_footprint")
 
     def add_battery_sensor(self, discharge_rate):
-        self.battery = Battery()
-        self.battery.frequency(1)
-        self.append(self.battery)
-        self.battery.add_interface('ros', topic=f"{self.name}/battery")
+        self.battery = BatterySensor(self.name)
