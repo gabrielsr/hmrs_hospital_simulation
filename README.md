@@ -61,3 +61,8 @@ roslaunch motion_ctrl base_navigation.launch
 
 . No module named 'rospy' error in the beginning of the simulation.
   Check if you had executed 'initros' in the current terminal.
+
+
+## 
+
+"This work was financed in part by FAPDF under Call 03/2018."
