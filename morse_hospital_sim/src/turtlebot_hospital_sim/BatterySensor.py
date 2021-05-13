@@ -39,9 +39,9 @@ class BatterySensor:
 
             msg.charge = self.charge - self.discharge_rate_ah if self.discharge_rate_ah != 0 else self.charge - self.charge*self.discharge_rate_percentage
             msg.percentage = self.charge/self.capacity
-            self.percentage = self.charge/self.capacity
             self.battery_pub.publish(msg)
             self.charge = msg.charge
+            self.percentage = msg.percentage
         except rospy.exceptions.ROSException:
             pass
         self.timer = Timer(1, self.update_charge)
