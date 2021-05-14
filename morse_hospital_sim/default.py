@@ -32,6 +32,7 @@ for i in range(1, n_robots+1):
 
 # Clock
 clock = Clock()
+clock.frequency(25)
 robot_list[0].append(clock)
 clock.add_interface('ros', topic="/clock")
 
@@ -40,8 +41,10 @@ charging_zone = Zone(type='Charging')
 charging_zone.size=[5 for x in range(3)]
 charging_zone.translate(x=-19, y=-3, z=0)
 
+
+nurse_pose = os.environ['NURSE_POSE'][1:-1].split(';')
 nurse = Nurse(name='nurse')
-nurse.translate(x=-35.97, y=17.67, z=0)
+nurse.translate(x=float(nurse_pose[0]), y=float(nurse_pose[1]), z=0)
 
 # set 'fastmode' to True to switch to wireframe mode
 env = Environment(f'{PATH}/models/hospital_v3_v1.blend', fastmode=True)
