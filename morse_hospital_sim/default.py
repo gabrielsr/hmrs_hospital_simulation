@@ -7,6 +7,7 @@ from morse.builder import *
 from turtlebot_hospital_sim.Turtlebot import Turtlebot
 from turtlebot_hospital_sim.GrabberRobot import GrabberRobot
 from turtlebot_hospital_sim.Nurse import Nurse
+from turtlebot_hospital_sim.Inventory import Inventory
 import os
 
 PATH = "/".join(__file__.split("/")[:-1])
@@ -26,7 +27,7 @@ for i in range(1, n_robots+1):
 	robot_name = os.environ['ROBOT_NAME_'+str(i)]
 	robot_pose = os.environ['ROBOT_POSE_'+str(i)][1:-1].split(';')
 	robot = GrabberRobot(name=robot_name, path=f"{PATH}/models/turtlebot.blend")
-	robot.add_to_simulation(x=float(robot_pose[0]), y=float(robot_pose[1]))
+	robot.add_to_simulation(x=float(robot_pose[0]), y=float(robot_pose[1]), z_rot=float(robot_pose[2]))
 	robot_list.append(robot)
 
 # Clock
@@ -40,7 +41,7 @@ charging_zone.size=[5 for x in range(3)]
 charging_zone.translate(x=-19, y=-3, z=0)
 
 nurse = Nurse(name='nurse')
-nurse.translate(x=15, y=15, z=0)
+nurse.translate(x=-35.97, y=17.67, z=0)
 
 # set 'fastmode' to True to switch to wireframe mode
 env = Environment(f'{PATH}/models/hospital_v3_v1.blend', fastmode=True)
