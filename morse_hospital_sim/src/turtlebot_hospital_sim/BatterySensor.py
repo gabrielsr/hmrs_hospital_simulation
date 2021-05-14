@@ -4,9 +4,10 @@ from morse.builder import *
 from sensor_msgs.msg import BatteryState
 
 class BatterySensor:
-    def __init__(self, parent, capacity=1800, initial_percentage=100, discharge_rate_percentage=0.05, discharge_rate_ah=0):
+    def __init__(self, parent, capacity=1800, initial_percentage=1, discharge_rate_percentage=0.05, discharge_rate_ah=0):
         self.parent = parent
         self.capacity = capacity * initial_percentage
+        self.percentage = initial_percentage
         self.voltage = 11.1
         self.status = 0
         self.health = 0
@@ -36,10 +37,11 @@ class BatterySensor:
             msg.power_supply_technology = self.tech
             msg.present = True
 
-            msg.charge=self.charge - self.discharge_rate_ah if self.discharge_rate_ah else self.charge - self.charge*self.discharge_rate_percentage
+            msg.charge = self.charge - self.discharge_rate_ah if self.discharge_rate_ah != 0 else self.charge - self.charge*self.discharge_rate_percentage
             msg.percentage = self.charge/self.capacity
             self.battery_pub.publish(msg)
             self.charge = msg.charge
+            self.percentage = msg.percentage
         except rospy.exceptions.ROSException:
             pass
         self.timer = Timer(1, self.update_charge)
