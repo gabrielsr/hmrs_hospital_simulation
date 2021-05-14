@@ -24,12 +24,12 @@ class Turtlebot(Robot):
 
     def add_lidar_sensor(self):
         self.lidar = Hokuyo()
-        self.lidar.frequency(1)
+        self.lidar.frequency(10)
         self.append(self.lidar)
         self.lidar.properties(Visible_arc = False)
-        self.lidar.properties(laser_range = 30.0)
-        self.lidar.properties(resolution = 1.0)
-        self.lidar.properties(scan_window = 270.0)
+        self.lidar.properties(laser_range = 15.0)
+        self.lidar.properties(resolution = 0.50)
+        self.lidar.properties(scan_window = 180.0)
         self.lidar.create_laser_arc()
         self.lidar.add_interface('ros', topic=f"{self.name}/lidar", frame_id=f"base_laser_link")
 
@@ -55,3 +55,9 @@ class Turtlebot(Robot):
 
     def add_battery_sensor(self, discharge_rate):
         self.battery = BatterySensor(self.name)
+        # self.battery = Battery()
+        # # self.battery = BatteryRobot(self)
+        # self.battery.frequency(1)
+        # self.battery.properties(DischargingRate = discharge_rate)
+        # self.append(self.battery)
+        # self.battery.add_interface('ros', topic=f"{self.name}/battery")
