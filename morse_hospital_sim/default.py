@@ -21,8 +21,8 @@ PATH = "/".join(__file__.split("/")[:-1])
 # robot2 = GrabberRobot(name='turtlebot2', path=f"{PATH}/models/turtlebot.blend")
 # robot2.add_to_simulation(x=float(robot_pose_2[0]), y=float(robot_pose_2[1]))
 
-# n_robots = int(os.environ['N_ROBOTS'])
-n_robots = 1
+n_robots = int(os.environ['N_ROBOTS'])
+# n_robots = 1
 robot_list = []
 for i in range(1, n_robots+1):
 	robot_name = os.environ['ROBOT_NAME_'+str(i)]
