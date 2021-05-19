@@ -9,11 +9,11 @@ class Nurse(Human):
         Human.__init__(self, name=name, filename=path)
         self.name = name
         self.path = path
-        self.pub = rospy.Publisher(f"{name}/fauth", String, queue_size=10)
-        self.pub_action = rospy.Publisher(f"{name}/action", String, queue_size=10)
-        self.pub_log = rospy.Publisher(f"{name}/log", String, queue_size=10)
-        self.pub_dum = rospy.Publisher("/nurse/comms", String, queue_size=10)
-        self.pub_dum = rospy.Publisher("/led_strip/display", String, queue_size=10)
+        self.pub = rospy.Publisher(f"{name}/fauth", String, queue_size=5)
+        self.pub_action = rospy.Publisher(f"{name}/action", String, queue_size=5)
+        self.pub_log = rospy.Publisher("/log", String, queue_size=5)
+        self.pub_dum1 = rospy.Publisher("/nurse/comms", String, queue_size=5)
+        self.pub_dum2 = rospy.Publisher("/led_strip/display", String, queue_size=5)
         
         self.sub = rospy.Subscriber("/led_strip/display", String, self.handle_auth)
         self.sub_comms = rospy.Subscriber("/nurse/comms", String, self.comms)
@@ -31,12 +31,13 @@ class Nurse(Human):
         self.pub_log.publish(str(log))
         pub_str = String()
         # if com_data.data == "Open Drawer":
-        pub_str.data = "deposit"
+        pub_str.data = "r1"
+        self.pub_comms = rospy.Publisher(f"{pub_str.data}/comms", String, queue_size=5)
         print(pub_str.data)
-        rate = rospy.Rate(1)
+        rate = rospy.Rate(5)
         for i in range(0,5):
             rospy.loginfo(pub_str)
-            self.pub_action.publish(pub_str)
+            self.pub_comms.publish(pub_str)
             rate.sleep()
 
     def add_pose_sensor(self):
@@ -48,11 +49,12 @@ class Nurse(Human):
 
     def handle_auth(self, msg):
         pub_str = String()
+        log = String()
         pub_str.data = "auth"
         self.pub.publish(pub_str)
         log.data = self.name + ": received "+str(pub_str)
         self.pub_log.publish(str(log))
-        rate = rospy.Rate(1)
+        rate = rospy.Rate(5)
         for i in range(0,5):
             rospy.loginfo(pub_str)
             self.pub.publish(pub_str)

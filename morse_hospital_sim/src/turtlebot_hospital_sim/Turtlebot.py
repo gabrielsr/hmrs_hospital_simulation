@@ -1,5 +1,7 @@
+import rospy
 from morse.builder import *
 from turtlebot_hospital_sim.BatterySensor import BatterySensor
+from turtlebot_hospital_sim.ItemExchanger import ItemExchanger
 
 
 PATH = "/".join(__file__.split("/")[:-3])
@@ -10,6 +12,7 @@ class Turtlebot(Robot):
         Robot.__init__(self, path, name)
         self.name = name
         self.path = path
+        self.item_exchanger = ItemExchanger(name=name, obj="sphere")
 
     def add_to_simulation(self, x=-19, y=-3, z=0,
                           x_rot=0, y_rot=0, z_rot=0,
@@ -28,10 +31,10 @@ class Turtlebot(Robot):
         self.append(self.lidar)
         self.lidar.properties(Visible_arc = False)
         self.lidar.properties(laser_range = 15.0)
-        self.lidar.properties(resolution = 0.50)
+        self.lidar.properties(resolution = 0.5)
         self.lidar.properties(scan_window = 180.0)
         self.lidar.create_laser_arc()
-        self.lidar.add_interface('ros', topic=f"{self.name}/lidar", frame_id=f"base_laser_link")
+        self.lidar.add_interface('ros', topic=f"{self.name}/lidar", frame_id=f"{self.name}/base_laser_link")
 
     def add_motion_sensor(self):
         self.motion = MotionVW()
@@ -42,22 +45,22 @@ class Turtlebot(Robot):
     def add_pose_sensor(self):
         # Current position
         self.pose = Pose()
-        self.pose.frequency(10)
+        self.pose.frequency(1)
         self.append(self.pose)
         self.pose.add_interface('ros', topic=f"{self.name}/pose", frame_id="map")
 
     def add_odometry_sensor(self):
         # Displacement since last Blender tick
         self.odometry = Odometry()
-        self.odometry.frequency(10)
+        self.odometry.frequency(20)
         self.append(self.odometry)
-        self.odometry.add_interface('ros', topic=f"{self.name}/odom", frame_id=f"odom", child_frame_id=f"base_footprint")
+        self.odometry.add_interface('ros', topic=f"{self.name}/odom", frame_id=f"{self.name}/odom", child_frame_id=f"{self.name}/base_footprint")
 
     def add_battery_sensor(self, discharge_rate):
         self.battery = BatterySensor(self.name)
         # self.battery = Battery()
         # # self.battery = BatteryRobot(self)
-        # self.battery.frequency(1)
+        # self.battery.frequency(10)
         # self.battery.properties(DischargingRate = discharge_rate)
         # self.append(self.battery)
         # self.battery.add_interface('ros', topic=f"{self.name}/battery")
