@@ -27,8 +27,14 @@ robot_list = []
 for i in range(1, n_robots+1):
 	robot_name = os.environ['ROBOT_NAME_'+str(i)]
 	robot_pose = os.environ['ROBOT_POSE_'+str(i)][1:-1].split(';')
+	dischar_rate = os.environ['BATT_SLOPE_STATE_'+str(i)]
+	batt_state = os.environ['BATT_INIT_STATE_'+str(i)]
 	robot = Turtlebot(name=robot_name, path=f"{PATH}/models/turtlebot.blend")
-	robot.add_to_simulation(x=float(robot_pose[0]), y=float(robot_pose[1]), z_rot=float(robot_pose[2]))
+	robot.add_to_simulation(x=float(robot_pose[0]), 
+		y=float(robot_pose[1]), 
+		z_rot=float(robot_pose[2]),
+		battery_discharge_rate=dischar_rate,
+		batt_init_state=batt_state)
 	robot_list.append(robot)
 
 # Clock

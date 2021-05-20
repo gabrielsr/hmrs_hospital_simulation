@@ -16,14 +16,15 @@ class Turtlebot(Robot):
 
     def add_to_simulation(self, x=-19, y=-3, z=0,
                           x_rot=0, y_rot=0, z_rot=0,
-                          battery_discharge_rate=0.05):
+                          battery_discharge_rate=0.05,
+                          batt_init_state=1.0):
         self.translate(x, y, z)
         self.rotate(x_rot, y_rot, z_rot)
         self.add_motion_sensor()
         self.add_pose_sensor()
         self.add_lidar_sensor()
         self.add_odometry_sensor()
-        self.add_battery_sensor(battery_discharge_rate)
+        self.add_battery_sensor(battery_discharge_rate, batt_init_state)
 
     def add_lidar_sensor(self):
         self.lidar = Hokuyo()
@@ -56,8 +57,10 @@ class Turtlebot(Robot):
         self.append(self.odometry)
         self.odometry.add_interface('ros', topic=f"{self.name}/odom", frame_id=f"{self.name}/odom", child_frame_id=f"{self.name}/base_footprint")
 
-    def add_battery_sensor(self, discharge_rate):
-        self.battery = BatterySensor(self.name, discharge_rate_percentage=discharge_rate)
+    def add_battery_sensor(self, discharge_rate, init_state):
+        self.battery = BatterySensor(self.name, 
+            discharge_rate_percentage=discharge_rate,
+            initial_percentage=init_state)
         # self.battery = Battery()
         # # self.battery = BatteryRobot(self)
         # self.battery.frequency(10)
