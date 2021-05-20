@@ -16,7 +16,6 @@ def formatlog(severity, who, loginfo, skill, params):
 
 
 class BatterySensor:
-<<<<<<< HEAD
     def __init__(self, parent,
             capacity=1800,
             initial_percentage=1,
