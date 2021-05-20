@@ -5,6 +5,14 @@ import rospy
 
 PATH = "/".join(__file__.split("/")[:-3])
 
+def formatlog(severity, who, loginfo, skill, params):
+    global simulation_init_time
+    return ('['+severity+'],'+
+               who+','+
+               loginfo+','+
+               skill+','+
+               params)
+
 class Inventory:
     def __init__(self, name, obj):
         self.name = name
@@ -32,7 +40,11 @@ class Inventory:
     def inventory_callback(self, msg):
         log = String()
         # log.data = "Sample has arrived at " + str(rospy.get_rostime())
-        log.data = self.name + ","+ str(rospy.get_rostime()) + "Sample has arrived " +msg.data
+        log.data = formatlog('info',
+            self.name,
+            'sync',
+            'wait-sample',
+            '(status=sample-received)')
         self.logger_pub.publish(log)
         # rospy.loginfo(self.name+": received "+msg.data)
         # self.logger_pub.publish(msg)

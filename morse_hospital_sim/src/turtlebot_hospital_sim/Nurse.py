@@ -5,6 +5,14 @@ from std_msgs.msg import String
 import rospy
 import time
 
+def formatlog(severity, who, loginfo, skill, params):
+    global simulation_init_time
+    return ('['+severity+'],'+
+               who+','+
+               loginfo+','+
+               skill+','+
+               params)
+
 class Nurse(Human):
     def __init__(self, name, path='human_rig'):
         Human.__init__(self, name=name, filename=path)
@@ -24,7 +32,11 @@ class Nurse(Human):
     def comms(self, com_data):
         rospy.logwarn(com_data)
         log = String()
-        log.data = self.name + ","+ str(rospy.get_rostime()) + ",received "+str(com_data)
+        log.data = formatlog('info',
+            self.name,
+            'sync',
+            'wait-message',
+            '(status=message-received)')
         print("NURSE")
         print(log.data)
         print(com_data.data)
@@ -54,7 +66,11 @@ class Nurse(Human):
         pub_str.data = "auth"
         self.pub.publish(pub_str)
         # log.data = self.name + ": athentication received "+str(pub_str)
-        log.data = self.name + ","+ str(rospy.get_rostime()) + ",athentication received "+str(pub_str)
+        log.data = formatlog('info',
+            self.name,
+            'sync',
+            'received-request',
+            '(status=sending-request)')
         self.pub_log.publish(log)
         rate = rospy.Rate(5)
         for i in range(0,5):
@@ -62,5 +78,9 @@ class Nurse(Human):
             self.pub.publish(pub_str)
             log.data = self.name + ": sent "+str(pub_str)
             rate.sleep()
-        log.data = self.name + ","+ str(rospy.get_rostime()) + ",sent "+str(pub_str)
+        log.data = formatlog('info',
+            self.name,
+            'sync',
+            'request-sent',
+            '(status=waiting)')
         self.pub_log.publish(log)

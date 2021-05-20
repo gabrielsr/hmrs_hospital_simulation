@@ -7,9 +7,18 @@ import time
 
 PATH = "/".join(__file__.split("/")[:-3])
 
+def formatlog(severity, who, loginfo, skill, params):
+    global simulation_init_time
+    return ('['+severity+'],'+
+               who+','+
+               loginfo+','+
+               skill+','+
+               params)
+
 class GrabberRobot(Turtlebot):
     def __init__(self, name, path=f"{PATH}/models/turtlebot.blend"):
         Turtlebot.__init__(self, name=name, path=path)
+        self.add_to_simulation(battery_discharge_rate=0.0)
         self.name = name
         self.path = path
         self.item_exchanger = ItemExchanger(name=name, obj="sphere")
@@ -32,7 +41,12 @@ class GrabberRobot(Turtlebot):
         rospy.logwarn(com_data)
         log = String()
         # log.data = self.name + ": received sample from "+str(com_data)+" at "+str(rospy.get_rostime())
-        log.data = self.name + ","+ str(rospy.get_rostime()) + ",received sample from "+str(com_data)
+        # log.data = self.name + ","+ str(rospy.get_rostime()) + ",received sample from "+str(com_data)
+        log.data = formatlog('info',
+            self.name,
+            'sync',
+            'wait-message',
+            '(status=message-received)')
         print(self.name)
         print(log.data)
         print(com_data.data)

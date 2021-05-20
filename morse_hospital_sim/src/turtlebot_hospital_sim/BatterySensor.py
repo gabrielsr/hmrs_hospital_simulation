@@ -6,6 +6,15 @@ from std_msgs.msg import String
 from sensor_msgs.msg import BatteryState
 from geometry_msgs.msg import Twist
 
+def formatlog(severity, who, loginfo, skill, params):
+    global simulation_init_time
+    return ('['+severity+'],'+
+               who+','+
+               loginfo+','+
+               skill+','+
+               params)
+
+
 class BatterySensor:
     def __init__(self, parent, capacity=1800, initial_percentage=1, discharge_rate_percentage=0.05, discharge_rate_ah=0):
         self.parent = parent
@@ -49,9 +58,13 @@ class BatterySensor:
             self.percentage = msg.percentage
             if msg.percentage < .01:
                 log = String()
-                log.data = self.parent + ","+ str(rospy.get_rostime()) + ",LOW BATTERY,"+str(msg.percentage)
+                log.data = formatlog('warn',
+                    self.parent,
+                    'simulation',
+                    'LOW BATTERY',
+                    str(msg.percentage))
                 self.log_pub.publish(log)
-                # log.data = "ENDSIM"
+                log.data = "ENDSIM"
                 self.log_pub.publish(log)
                 vel_0 = Twist()
                 rate = rospy.Rate(30)
