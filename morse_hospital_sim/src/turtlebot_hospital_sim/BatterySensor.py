@@ -7,7 +7,7 @@ from sensor_msgs.msg import BatteryState
 from geometry_msgs.msg import Twist
 
 class BatterySensor:
-    def __init__(self, parent, capacity=1800, initial_percentage=1, discharge_rate_percentage=0.05, discharge_rate_ah=0):
+    def __init__(self, parent, capacity=1800, initial_percentage=1, discharge_rate_percentage=0.0005, discharge_rate_ah=0):
         self.parent = parent
         self.capacity = capacity * initial_percentage
         self.percentage = initial_percentage
