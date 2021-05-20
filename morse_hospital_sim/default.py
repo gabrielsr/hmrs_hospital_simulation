@@ -33,7 +33,7 @@ for i in range(1, n_robots+1):
 
 # Clock
 clock = Clock()
-clock.frequency(10)
+clock.frequency(60)
 robot_list[0].append(clock)
 clock.add_interface('ros', topic="/clock")
 
@@ -56,7 +56,7 @@ nurse.translate(x=float(nurse_pose[0]), y=float(nurse_pose[1]), z=0)
 env = Environment(f'{PATH}/models/hospital_v3_v1.blend', fastmode=True)
 env.set_horizon_color(color=(0.65, 0.65, 0.65))
 # env.show_framerate()
-env.simulator_frequency(15, 100, 100)
+env.simulator_frequency(60, 100, 100)
 # env.simulator_frequency(120, 5, 5)
 # env.set_time_strategy(TimeStrategies.FixedSimulationStep)
 # env.set_time_scale(self, slowdown_by = None, accelerate_by = None)

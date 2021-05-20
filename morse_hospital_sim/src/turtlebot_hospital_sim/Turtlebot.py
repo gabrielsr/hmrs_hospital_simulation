@@ -45,7 +45,7 @@ class Turtlebot(Robot):
     def add_pose_sensor(self):
         # Current position
         self.pose = Pose()
-        self.pose.frequency(1)
+        self.pose.frequency(20)
         self.append(self.pose)
         self.pose.add_interface('ros', topic=f"{self.name}/pose", frame_id="map")
 
@@ -57,7 +57,7 @@ class Turtlebot(Robot):
         self.odometry.add_interface('ros', topic=f"{self.name}/odom", frame_id=f"{self.name}/odom", child_frame_id=f"{self.name}/base_footprint")
 
     def add_battery_sensor(self, discharge_rate):
-        self.battery = BatterySensor(self.name)
+        self.battery = BatterySensor(self.name, discharge_rate_percentage=discharge_rate)
         # self.battery = Battery()
         # # self.battery = BatteryRobot(self)
         # self.battery.frequency(10)

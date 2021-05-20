@@ -31,11 +31,12 @@ class Inventory:
 
     def inventory_callback(self, msg):
         log = String()
-        log.data = "Sample has arrived at " + str(rospy.get_rostime())
+        # log.data = "Sample has arrived at " + str(rospy.get_rostime())
+        log.data = self.name + ","+ str(rospy.get_rostime()) + "Sample has arrived " +msg.data
         self.logger_pub.publish(log)
-        rospy.loginfo(self.name+": received "+msg.data)
-        self.logger_pub.publish(msg)
-        log.data = "Trigger simulation ending ..."
-        self.logger_pub.publish(log)
+        # rospy.loginfo(self.name+": received "+msg.data)
+        # self.logger_pub.publish(msg)
+        # log.data = "Trigger simulation ending ..."
+        # self.logger_pub.publish(log)
         log.data = "ENDSIM"
         self.logger_pub.publish(log)

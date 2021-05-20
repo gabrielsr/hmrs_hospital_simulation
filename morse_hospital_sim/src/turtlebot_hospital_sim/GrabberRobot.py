@@ -31,12 +31,13 @@ class GrabberRobot(Turtlebot):
     def comms(self, com_data):
         rospy.logwarn(com_data)
         log = String()
-        log.data = self.name + ": received sample from "+str(com_data)+" at "+str(rospy.get_rostime())
+        # log.data = self.name + ": received sample from "+str(com_data)+" at "+str(rospy.get_rostime())
+        log.data = self.name + ","+ str(rospy.get_rostime()) + ",received sample from "+str(com_data)
         print(self.name)
         print(log.data)
         print(com_data.data)
         print(self.name)
-        self.pub_log.publish(str(log))
+        self.pub_log.publish(log)
         self.pub_invent.publish(str(log))
         pub_str = String()
         pub_str.data = "r1"

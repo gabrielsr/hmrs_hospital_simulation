@@ -1,3 +1,4 @@
+
 from morse.builder import *
 from turtlebot_hospital_sim.ItemExchanger import ItemExchanger
 from std_msgs.msg import String
@@ -23,12 +24,12 @@ class Nurse(Human):
     def comms(self, com_data):
         rospy.logwarn(com_data)
         log = String()
-        log.data = self.name + ": received "+str(com_data)
+        log.data = self.name + ","+ str(rospy.get_rostime()) + ",received "+str(com_data)
         print("NURSE")
         print(log.data)
         print(com_data.data)
         print("NURSE")
-        self.pub_log.publish(str(log))
+        self.pub_log.publish(log)
         pub_str = String()
         # if com_data.data == "Open Drawer":
         pub_str.data = "r1"
@@ -52,12 +53,14 @@ class Nurse(Human):
         log = String()
         pub_str.data = "auth"
         self.pub.publish(pub_str)
-        log.data = self.name + ": received "+str(pub_str)
-        self.pub_log.publish(str(log))
+        # log.data = self.name + ": athentication received "+str(pub_str)
+        log.data = self.name + ","+ str(rospy.get_rostime()) + ",athentication received "+str(pub_str)
+        self.pub_log.publish(log)
         rate = rospy.Rate(5)
         for i in range(0,5):
             rospy.loginfo(pub_str)
             self.pub.publish(pub_str)
             log.data = self.name + ": sent "+str(pub_str)
-            self.pub_log.publish(str(log))
             rate.sleep()
+        log.data = self.name + ","+ str(rospy.get_rostime()) + ",sent "+str(pub_str)
+        self.pub_log.publish(log)
