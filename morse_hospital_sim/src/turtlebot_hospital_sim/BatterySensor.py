@@ -68,15 +68,18 @@ class BatterySensor:
                     'LOW BATTERY',
                     str(msg.percentage))
                 self.log_pub.publish(log)
-                # log.data = "ENDSIM"
-                # self.log_pub.publish(log)
-                vel_0 = Twist()
-                rate = rospy.Rate(30)
-                while True:
-                    self.vel_pub.publish(vel_0)
-                    rate.sleep()
+                # self.stop_robot()
 
         except rospy.exceptions.ROSException:
             pass
         self.timer = Timer(1, self.update_charge)
         self.timer.start()
+
+    def stop_robot(self):
+        # log.data = "ENDSIM"
+        # self.log_pub.publish(log)
+        vel_0 = Twist()
+        rate = rospy.Rate(30)
+        while True:
+            self.vel_pub.publish(vel_0)
+            rate.sleep()
