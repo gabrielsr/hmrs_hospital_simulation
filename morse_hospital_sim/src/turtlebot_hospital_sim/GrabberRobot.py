@@ -17,6 +17,7 @@ def formatlog(severity, who, loginfo, skill, params):
 
 class GrabberRobot(FakeRobot):
     def __init__(self, name, path=f"{PATH}/models/turtlebot.blend"):
+        FakeRobot.__init__(self, name=name)
         # Turtlebot.__init__(self, name=name, path=path)
         # Turtlebot.add_to_simulation(self, battery_discharge_rate=0.0)
         self.name = name
@@ -29,6 +30,11 @@ class GrabberRobot(FakeRobot):
         self.pub_log = rospy.Publisher("/log", String, queue_size=5)
         self.pub_dum1 = rospy.Publisher("/"+name+"/comms", String, queue_size=5)
         self.add_pose_sensor()
+
+    def add_to_simulation(self, x=-19, y=-3, z=0,
+                          x_rot=0, y_rot=0, z_rot=0):
+        self.translate(x, y, z)
+        self.rotate(x_rot, y_rot, z_rot)
 
     def add_pose_sensor(self):
         # Current position
