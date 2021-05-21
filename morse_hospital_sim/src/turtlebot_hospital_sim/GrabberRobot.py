@@ -15,10 +15,10 @@ def formatlog(severity, who, loginfo, skill, params):
                skill+','+
                params)
 
-class GrabberRobot(Turtlebot):
+class GrabberRobot(FakeRobot):
     def __init__(self, name, path=f"{PATH}/models/turtlebot.blend"):
-        Turtlebot.__init__(self, name=name, path=path)
-        self.add_to_simulation(battery_discharge_rate=0.0)
+        # Turtlebot.__init__(self, name=name, path=path)
+        # Turtlebot.add_to_simulation(self, battery_discharge_rate=0.0)
         self.name = name
         self.path = path
         self.item_exchanger = ItemExchanger(name=name, obj="sphere")
