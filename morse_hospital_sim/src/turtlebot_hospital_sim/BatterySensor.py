@@ -69,11 +69,13 @@ class BatterySensor:
                     str(msg.percentage))
                 self.log_pub.publish(log)
                 # self.stop_robot()
+                self.timer.cancel()
+                return
+            self.timer = Timer(1, self.update_charge)
+            self.timer.start()
 
         except rospy.exceptions.ROSException:
             pass
-        self.timer = Timer(1, self.update_charge)
-        self.timer.start()
 
     def stop_robot(self):
         # log.data = "ENDSIM"
