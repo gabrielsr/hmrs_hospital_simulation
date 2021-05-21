@@ -33,8 +33,8 @@ for i in range(1, n_robots+1):
 	robot.add_to_simulation(x=float(robot_pose[0]), 
 		y=float(robot_pose[1]), 
 		z_rot=float(robot_pose[2]),
-		battery_discharge_rate=dischar_rate,
-		batt_init_state=batt_state)
+		battery_discharge_rate=float(dischar_rate),
+		batt_init_state=float(batt_state))
 	robot_list.append(robot)
 
 # Clock
