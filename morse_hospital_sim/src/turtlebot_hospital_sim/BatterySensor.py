@@ -68,8 +68,8 @@ class BatterySensor:
                     'LOW BATTERY',
                     str(msg.percentage))
                 self.log_pub.publish(log)
-                log.data = "ENDSIM"
-                self.log_pub.publish(log)
+                # log.data = "ENDSIM"
+                # self.log_pub.publish(log)
                 vel_0 = Twist()
                 rate = rospy.Rate(30)
                 while True:
