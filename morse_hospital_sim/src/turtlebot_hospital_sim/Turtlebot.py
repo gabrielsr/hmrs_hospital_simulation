@@ -33,9 +33,9 @@ class Turtlebot(Robot):
         self.lidar.properties(Visible_arc = False)
         self.lidar.properties(laser_range = 15.0)
         self.lidar.properties(resolution = 0.5)
-        self.lidar.properties(scan_window = 180.0)
+        self.lidar.properties(scan_window = 360.0)
         self.lidar.create_laser_arc()
-        self.lidar.add_interface('ros', topic=f"{self.name}/lidar", frame_id=f"{self.name}/base_laser_link")
+        self.lidar.add_interface('ros', topic=f"{self.name}/lidar", frame_id=f"{self.name}/base_footprint")
 
     def add_motion_sensor(self):
         self.motion = MotionVW()
