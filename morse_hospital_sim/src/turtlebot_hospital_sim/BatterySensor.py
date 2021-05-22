@@ -39,11 +39,9 @@ class BatterySensor:
         self.log_pub = rospy.Publisher(f"/log", String, queue_size=1)
         self.vel_pub = rospy.Publisher(f"{self.parent}/cmd_vel", Twist, queue_size=1)
 
-        self.timer = Timer(1, self.update_charge)
-        self.timer.start()
+        # self.timer = rospy.Timer(rospy.Duration(1), self.update_charge)
 
-
-    def update_charge(self):
+    def update_charge(self, event):
         try:
             msg = BatteryState()
             msg.voltage = self.voltage
@@ -69,10 +67,8 @@ class BatterySensor:
                     str(msg.percentage))
                 self.log_pub.publish(log)
                 # self.stop_robot()
-                self.timer.cancel()
+                self.timer.shutdown()
                 return
-            self.timer = Timer(1, self.update_charge)
-            self.timer.start()
 
         except rospy.exceptions.ROSException:
             pass
@@ -82,6 +78,7 @@ class BatterySensor:
         # self.log_pub.publish(log)
         vel_0 = Twist()
         rate = rospy.Rate(30)
+        self.timer.cancel()
         while True:
             self.vel_pub.publish(vel_0)
             rate.sleep()
