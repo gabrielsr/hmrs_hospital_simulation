@@ -59,7 +59,7 @@ nurse = Nurse(name='nurse')
 nurse.translate(x=float(nurse_pose[0]), y=float(nurse_pose[1]), z=0)
 
 # set 'fastmode' to True to switch to wireframe mode
-env = Environment(f'{PATH}/models/hospital_v3_v1.blend', fastmode=True)
+env = Environment(f'{PATH}/models/hospital_v5_v1.blend', fastmode=True)
 env.set_horizon_color(color=(0.65, 0.65, 0.65))
 # env.show_framerate()
 env.simulator_frequency(60, 100, 100)
