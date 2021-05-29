@@ -7,9 +7,9 @@ from turtlebot_hospital_sim.ItemExchanger import ItemExchanger
 PATH = "/".join(__file__.split("/")[:-3])
 
 
-class Turtlebot(Robot):
+class Turtlebot(Pioneer3DX):
     def __init__(self, name="turtlebot", path=f"{PATH}/models/turtlebot.blend"):
-        Robot.__init__(self, path, name)
+        Pioneer3DX.__init__(self, name)
         self.name = name
         self.path = path
         self.item_exchanger = ItemExchanger(name=name, obj="sphere")
@@ -29,16 +29,18 @@ class Turtlebot(Robot):
     def add_lidar_sensor(self):
         self.lidar = Hokuyo()
         self.lidar.frequency(10)
+        self.lidar.translate(0, 0, 1)
         self.append(self.lidar)
         self.lidar.properties(Visible_arc = False)
-        self.lidar.properties(laser_range = 15.0)
+        self.lidar.properties(laser_range = 10.0)
         self.lidar.properties(resolution = 1)
         self.lidar.properties(scan_window = 360.0)
         self.lidar.create_laser_arc()
         self.lidar.add_interface('ros', topic=f"{self.name}/lidar", frame_id=f"{self.name}/base_footprint")
 
     def add_motion_sensor(self):
-        self.motion = MotionVW()
+        # self.motion = MotionVW()
+        self.motion = MotionVWDiff()
         # self.motion.frequency(10)
         self.append(self.motion)
         self.motion.add_interface('ros', topic=f"{self.name}/cmd_vel")
