@@ -63,7 +63,7 @@ class GrabberRobot(FakeRobot):
         pub_str.data = "r1"
         self.pub_comms = rospy.Publisher(f"{pub_str.data}/comms", String, queue_size=5)
         print(pub_str.data)
-        rate = rospy.Rate(5)
+        rate = rospy.Rate(.5)
         for i in range(0,5):
             rospy.loginfo(pub_str)
             self.pub_comms.publish(pub_str)

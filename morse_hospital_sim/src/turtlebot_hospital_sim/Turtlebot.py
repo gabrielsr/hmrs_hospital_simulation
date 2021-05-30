@@ -25,11 +25,16 @@ class Turtlebot(Pioneer3DX):
         self.add_lidar_sensor()
         self.add_odometry_sensor()
         self.add_battery_sensor(battery_discharge_rate, batt_init_state)
+        self.properties(Influence = 0.1, Friction = 5,
+                        WheelFLName = "Wheel_L", WheelFRName = "Wheel_R",
+                        WheelRLName = "None", WheelRRName = "None",
+                        CasterWheelName = "CasterWheel", 
+                        FixTurningSpeed = 0.52)
 
     def add_lidar_sensor(self):
         self.lidar = Hokuyo()
         self.lidar.frequency(10)
-        self.lidar.translate(0, 0, 1)
+        self.lidar.translate(x=0.0, z=0.252)
         self.append(self.lidar)
         self.lidar.properties(Visible_arc = False)
         self.lidar.properties(laser_range = 10.0)
