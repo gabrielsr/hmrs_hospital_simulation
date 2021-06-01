@@ -22,7 +22,7 @@ class BatterySensor:
             discharge_rate_percentage=0.0005,
             discharge_rate_ah=0):
         self.parent = parent
-        self.capacity = capacity * initial_percentage
+        self.capacity = 1800
         self.percentage = initial_percentage
         self.voltage = 11.1
         self.status = 0
@@ -39,46 +39,47 @@ class BatterySensor:
         self.log_pub = rospy.Publisher(f"/log", String, queue_size=1)
         self.vel_pub = rospy.Publisher(f"{self.parent}/cmd_vel", Twist, queue_size=1)
 
-        # self.timer = rospy.Timer(rospy.Duration(1), self.update_charge)
+        self.thr_timer = Timer(30, self.set_ros_timer)
+        self.thr_timer.start()
+
+    def set_ros_timer(self):
+        while rospy.get_time() == 0:
+            rospy.logwarn(f"{self.parent} waiting for clock...")
+        rospy.logwarn(f"{self.parent} setting up battery module...")
+        self.timer = rospy.Timer(rospy.Duration(1), self.update_charge)
 
     def update_charge(self, event):
-        try:
-            msg = BatteryState()
-            msg.voltage = self.voltage
-            msg.current = self.current
-            msg.capacity = self.capacity
-            msg.design_capacity = self.design_capacity
-            msg.power_supply_status = self.status
-            msg.power_supply_health = self.health
-            msg.power_supply_technology = self.tech
-            msg.present = True
+        msg = BatteryState()
+        msg.voltage = self.voltage
+        msg.current = self.current
+        msg.capacity = self.capacity
+        msg.design_capacity = self.design_capacity
+        msg.power_supply_status = self.status
+        msg.power_supply_health = self.health
+        msg.power_supply_technology = self.tech
+        msg.present = True
 
-            msg.charge = self.charge - self.discharge_rate_ah if self.discharge_rate_ah != 0 else self.charge - self.charge*self.discharge_rate_percentage
-            msg.percentage = self.charge/self.capacity
-            self.battery_pub.publish(msg)
-            self.charge = msg.charge
-            self.percentage = msg.percentage
-            if msg.percentage < .01:
-                log = String()
-                log.data = formatlog('warn',
-                    self.parent,
-                    'simulation',
-                    'LOW BATTERY',
-                    str(msg.percentage))
-                self.log_pub.publish(log)
-                # self.stop_robot()
-                self.timer.shutdown()
-                return
+        msg.charge = self.charge - self.discharge_rate_ah if self.discharge_rate_ah != 0 else self.charge - self.discharge_rate_percentage*self.capacity
+        msg.percentage = self.charge/self.capacity
+        rospy.logwarn(f"{self.parent} updating charge battery {msg.percentage*100}%...")
+        self.battery_pub.publish(msg)
+        self.charge = msg.charge
+        self.percentage = msg.percentage
+        if msg.percentage < .01:
+            log = String()
+            log.data = formatlog('warn',
+                self.parent,
+                'simulation',
+                'LOW BATTERY',
+                str(msg.percentage))
+            self.log_pub.publish(log)
+            self.new_timer = rospy.Timer(rospy.Duration(1.0/100.0), self.stop_robot)
+            # self.timer.cancel()
+            self.timer.shutdown()
+            # return
 
-        except rospy.exceptions.ROSException:
-            pass
-
-    def stop_robot(self):
+    def stop_robot(self, event):
         # log.data = "ENDSIM"
         # self.log_pub.publish(log)
         vel_0 = Twist()
-        rate = rospy.Rate(30)
-        self.timer.cancel()
-        while True:
-            self.vel_pub.publish(vel_0)
-            rate.sleep()
+        self.vel_pub.publish(vel_0)

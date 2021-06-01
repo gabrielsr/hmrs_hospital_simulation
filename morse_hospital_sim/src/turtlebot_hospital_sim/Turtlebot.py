@@ -69,7 +69,7 @@ class Turtlebot(Pioneer3DX):
             discharge_rate_percentage=discharge_rate,
             initial_percentage=init_state)
         # self.battery = Battery()
-        # # self.battery = BatteryRobot(self)
+        # self.battery = BatteryRobot(self)
         # self.battery.frequency(10)
         # self.battery.properties(DischargingRate = discharge_rate)
         # self.append(self.battery)
