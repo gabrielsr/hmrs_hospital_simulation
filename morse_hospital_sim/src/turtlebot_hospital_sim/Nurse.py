@@ -76,8 +76,8 @@ class Nurse(Human):
             'received-request',
             '(status=sending-request)')
         self.pub_log.publish(log)
-        rate = rospy.Rate(5)
-        for i in range(0,5):
+        rate = rospy.Rate(.5)
+        for i in range(0,10):
             rospy.loginfo(pub_str)
             self.pub.publish(pub_str)
             log.data = self.name + ": sent "+str(pub_str)
