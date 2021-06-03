@@ -27,8 +27,13 @@ robot_list = []
 for i in range(1, n_robots+1):
 	robot_name = os.environ['ROBOT_NAME_'+str(i)]
 	robot_pose = os.environ['ROBOT_POSE_'+str(i)][1:-1].split(';')
-	dischar_rate = os.environ['BATT_SLOPE_STATE_'+str(i)]
+	dischar_rate = 0.0
 	batt_state = os.environ['BATT_INIT_STATE_'+str(i)]
+	if robot_name != os.environ['CHOSED_ROBOT']:
+		dischar_rate = float(os.environ['BATT_SLOPE_STATE_'+str(i)]) * 0.1
+	else:
+		dischar_rate = float(os.environ['BATT_SLOPE_STATE_'+str(i)])
+	print(robot_name+' has dischar_rate='+str(dischar_rate/100))
 	robot = Turtlebot(name=robot_name, path=f"{PATH}/models/turtlebot.blend")
 	robot.add_to_simulation(x=float(robot_pose[0]), 
 		y=float(robot_pose[1]), 
