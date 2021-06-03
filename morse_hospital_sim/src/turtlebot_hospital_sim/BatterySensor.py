@@ -65,7 +65,7 @@ class BatterySensor:
         self.battery_pub.publish(msg)
         self.charge = msg.charge
         self.percentage = msg.percentage
-        if msg.percentage < .01:
+        if msg.percentage < .05:
             log = String()
             log.data = formatlog('warn',
                 self.parent,
@@ -73,13 +73,17 @@ class BatterySensor:
                 'LOW BATTERY',
                 str(msg.percentage))
             self.log_pub.publish(log)
+            if self.parent == os.environ['CHOSE_ROBOT']:
+                rospy.logwarn(f"{self.parent} requesting simulation end...")
+                log = String()
+                log.data = "ENDLOWBATT"
+                self.log_pub.publish(log)
             self.new_timer = rospy.Timer(rospy.Duration(1.0/100.0), self.stop_robot)
             # self.timer.cancel()
             self.timer.shutdown()
             # return
 
     def stop_robot(self, event):
-        # log.data = "ENDSIM"
-        # self.log_pub.publish(log)
         vel_0 = Twist()
         self.vel_pub.publish(vel_0)
+        # check if the robot has to shutdown the simulation when low batt

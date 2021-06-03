@@ -29,7 +29,7 @@ for i in range(1, n_robots+1):
 	robot_pose = os.environ['ROBOT_POSE_'+str(i)][1:-1].split(';')
 	dischar_rate = 0.0
 	batt_state = os.environ['BATT_INIT_STATE_'+str(i)]
-	if robot_name != os.environ['CHOSED_ROBOT']:
+	if robot_name != os.environ['CHOSE_ROBOT']:
 		dischar_rate = float(os.environ['BATT_SLOPE_STATE_'+str(i)]) * 0.1
 	else:
 		dischar_rate = float(os.environ['BATT_SLOPE_STATE_'+str(i)])
