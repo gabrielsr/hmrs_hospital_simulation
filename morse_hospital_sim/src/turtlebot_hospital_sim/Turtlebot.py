@@ -1,11 +1,45 @@
 import rospy
+import nav_msgs.msg
 from morse.builder import *
+from threading import Timer
+from std_msgs.msg import String
 from turtlebot_hospital_sim.BatterySensor import BatterySensor
 from turtlebot_hospital_sim.ItemExchanger import ItemExchanger
-
+# import tf_conversions
+import numpy as np
 
 PATH = "/".join(__file__.split("/")[:-3])
 
+def formatlog(severity, who, loginfo, skill, params):
+    return ('['+severity+'],'+
+               who+','+
+               loginfo+','+
+               skill+','+
+               params)
+
+def euler_from_quaternion(quaternion):
+    """
+    Converts quaternion (w in last place) to euler roll, pitch, yaw
+    quaternion = [x, y, z, w]
+    Bellow should be replaced when porting for ROS 2 Python tf_conversions is done.
+    """
+    x = quaternion.x
+    y = quaternion.y
+    z = quaternion.z
+    w = quaternion.w
+
+    sinr_cosp = 2 * (w * x + y * z)
+    cosr_cosp = 1 - 2 * (x * x + y * y)
+    roll = np.arctan2(sinr_cosp, cosr_cosp)
+
+    sinp = 2 * (w * y - z * x)
+    pitch = np.arcsin(sinp)
+
+    siny_cosp = 2 * (w * z + x * y)
+    cosy_cosp = 1 - 2 * (y * y + z * z)
+    yaw = np.arctan2(siny_cosp, cosy_cosp)
+
+    return roll, pitch, yaw
 
 class Turtlebot(Pioneer3DX):
     def __init__(self, name="turtlebot", path=f"{PATH}/models/turtlebot.blend"):
@@ -13,6 +47,39 @@ class Turtlebot(Pioneer3DX):
         self.name = name
         self.path = path
         self.item_exchanger = ItemExchanger(name=name, obj="sphere")
+        self.curr_odom = nav_msgs.msg.Odometry()
+        self.pose_sub = rospy.Subscriber(f"/{self.name}/odom", nav_msgs.msg.Odometry, self.save_odom)
+        self.log_pub = rospy.Publisher(f"/log", String, queue_size=1)
+
+        self.thr_timer = Timer(30, self.set_ros_timer)
+        self.thr_timer.start()
+
+    def set_ros_timer(self):
+        while rospy.get_time() == 0:
+            rospy.logwarn(f"{self.name} waiting for clock...")
+        rospy.logwarn(f"{self.name} setting up battery module...")
+        self.timer = rospy.Timer(rospy.Duration(15), self.log_robot_pose)
+
+    def log_robot_pose(self, event):
+        quaternion = (
+            self.curr_odom.pose.pose.orientation.x,
+            self.curr_odom.pose.pose.orientation.y,
+            self.curr_odom.pose.pose.orientation.z,
+            self.curr_odom.pose.pose.orientation.w)
+        _, _, yaw = euler_from_quaternion(self.curr_odom.pose.pose.orientation)
+        # roll = euler[0]
+        # pitch = euler[1]
+        # yaw = euler[2]
+        robot_pose = "x=%.2f;y=%.2f;yaw=%.2f"%(self.curr_odom.pose.pose.position.x,
+                                               self.curr_odom.pose.pose.position.y,
+                                               yaw)
+        log = String()
+        log.data = formatlog('debug',
+            self.name,
+            'simulation',
+            'robot-pose',
+            robot_pose)
+        self.log_pub.publish(log)
 
     def add_to_simulation(self, x=-19, y=-3, z=0,
                           x_rot=0, y_rot=0, z_rot=0,
@@ -30,6 +97,9 @@ class Turtlebot(Pioneer3DX):
                         WheelRLName = "None", WheelRRName = "None",
                         CasterWheelName = "CasterWheel", 
                         FixTurningSpeed = 0.52)
+
+    def save_odom(self, msg):
+        self.curr_odom = msg
 
     def add_lidar_sensor(self):
         self.lidar = Hokuyo()
