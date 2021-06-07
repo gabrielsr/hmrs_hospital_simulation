@@ -48,7 +48,7 @@ class Turtlebot(Pioneer3DX):
         self.path = path
         self.item_exchanger = ItemExchanger(name=name, obj="sphere")
         self.curr_pose = geometry_msgs.msg.PoseStamped()
-        self.pose_sub = rospy.Subscriber(f"/{self.name}/odom", geometry_msgs.msg.PoseStamped, self.save_pose)
+        self.pose_sub = rospy.Subscriber(f"/{self.name}/pose", geometry_msgs.msg.PoseStamped, self.save_pose)
         self.log_pub = rospy.Publisher(f"/log", String, queue_size=1)
 
         self.thr_timer = Timer(30, self.set_ros_timer)
