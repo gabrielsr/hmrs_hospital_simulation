@@ -1,5 +1,5 @@
 import rospy
-import nav_msgs.msg
+import geometry_msgs.msg
 from morse.builder import *
 from threading import Timer
 from std_msgs.msg import String
@@ -47,8 +47,8 @@ class Turtlebot(Pioneer3DX):
         self.name = name
         self.path = path
         self.item_exchanger = ItemExchanger(name=name, obj="sphere")
-        self.curr_odom = nav_msgs.msg.Odometry()
-        self.pose_sub = rospy.Subscriber(f"/{self.name}/odom", nav_msgs.msg.Odometry, self.save_odom)
+        self.curr_pose = geometry_msgs.msg.PoseStamped()
+        self.pose_sub = rospy.Subscriber(f"/{self.name}/odom", geometry_msgs.msg.PoseStamped, self.save_pose)
         self.log_pub = rospy.Publisher(f"/log", String, queue_size=1)
 
         self.thr_timer = Timer(30, self.set_ros_timer)
@@ -62,16 +62,16 @@ class Turtlebot(Pioneer3DX):
 
     def log_robot_pose(self, event):
         quaternion = (
-            self.curr_odom.pose.pose.orientation.x,
-            self.curr_odom.pose.pose.orientation.y,
-            self.curr_odom.pose.pose.orientation.z,
-            self.curr_odom.pose.pose.orientation.w)
-        _, _, yaw = euler_from_quaternion(self.curr_odom.pose.pose.orientation)
+            self.curr_pose.pose.orientation.x,
+            self.curr_pose.pose.orientation.y,
+            self.curr_pose.pose.orientation.z,
+            self.curr_pose.pose.orientation.w)
+        _, _, yaw = euler_from_quaternion(self.curr_pose.pose.orientation)
         # roll = euler[0]
         # pitch = euler[1]
         # yaw = euler[2]
-        robot_pose = "x=%.2f;y=%.2f;yaw=%.2f"%(self.curr_odom.pose.pose.position.x,
-                                               self.curr_odom.pose.pose.position.y,
+        robot_pose = "x=%.2f;y=%.2f;yaw=%.2f"%(self.curr_pose.pose.position.x,
+                                               self.curr_pose.pose.position.y,
                                                yaw)
         log = String()
         log.data = formatlog('debug',
@@ -98,8 +98,8 @@ class Turtlebot(Pioneer3DX):
                         CasterWheelName = "CasterWheel", 
                         FixTurningSpeed = 0.52)
 
-    def save_odom(self, msg):
-        self.curr_odom = msg
+    def save_pose(self, msg):
+        self.curr_pose = msg
 
     def add_lidar_sensor(self):
         self.lidar = Hokuyo()
