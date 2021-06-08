@@ -33,7 +33,7 @@ for i in range(1, n_robots+1):
 		dischar_rate = float(os.environ['BATT_SLOPE_STATE_'+str(i)]) / 10
 	else:
 		dischar_rate = float(os.environ['BATT_SLOPE_STATE_'+str(i)])
-	print(robot_name+' has dischar_rate='+str(dischar_rate/100))
+	print(robot_name+' has dischar_rate='+str(dischar_rate))
 	robot = Turtlebot(name=robot_name, path=f"{PATH}/models/turtlebot.blend")
 	robot.add_to_simulation(x=float(robot_pose[0]),
 		y=float(robot_pose[1]),
