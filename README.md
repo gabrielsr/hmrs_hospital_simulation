@@ -1,4 +1,4 @@
-# hmrs_hostpital_sim_morse
+# hmrs_hospital_sim_morse
 
 ### Install Dependencies
 
