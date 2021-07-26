@@ -47,6 +47,13 @@ class BatterySensor:
             rospy.logwarn(f"{self.parent} waiting for clock...")
         rospy.logwarn(f"{self.parent} setting up battery module...")
         self.timer = rospy.Timer(rospy.Duration(1), self.update_charge)
+        self.logtimer = rospy.Timer(rospy.Duration(5), self.update_log)
+
+    def update_log(self, event):
+        if self.parent == os.environ['CHOSE_ROBOT']:
+            log = String()
+            log.data = f'{self.parent}_battery_level={self.percentage}'
+            self.log_pub.publish(log)
 
     def update_charge(self, event):
         msg = BatteryState()
@@ -66,13 +73,6 @@ class BatterySensor:
         self.charge = msg.charge
         self.percentage = msg.percentage
         if msg.percentage < .05:
-            log = String()
-            log.data = formatlog('warn',
-                self.parent,
-                'simulation',
-                'LOW BATTERY',
-                str(msg.percentage))
-            self.log_pub.publish(log)
             if self.parent == os.environ['CHOSE_ROBOT']:
                 rospy.logwarn(f"{self.parent} requesting simulation end...")
                 log = String()
