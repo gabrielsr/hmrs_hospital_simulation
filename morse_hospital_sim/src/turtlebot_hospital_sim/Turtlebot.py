@@ -1,3 +1,4 @@
+import json
 import rospy
 import geometry_msgs.msg
 from morse.builder import *
@@ -70,16 +71,26 @@ class Turtlebot(Pioneer3DX):
         # roll = euler[0]
         # pitch = euler[1]
         # yaw = euler[2]
-        robot_pose = "x=%.2f;y=%.2f;yaw=%.2f"%(self.curr_pose.pose.position.x,
-                                               self.curr_pose.pose.position.y,
-                                               yaw)
+        # robot_pose = "(x=%.2f;y=%.2f;yaw=%.2f)"%(self.curr_pose.pose.position.x,
+        #                                        self.curr_pose.pose.position.y,
+        #                                        yaw)
+        robot_pose = {
+            'x': '{:02.2f}'.format(self.curr_pose.pose.position.x),
+            'y': '{:02.2f}'.format(self.curr_pose.pose.position.y),
+            'yaw': '{:02.2f}'.format(yaw)
+        }
         log = String()
-        log.data = formatlog('debug',
-            self.name,
-            'simulation',
-            'robot-pose',
-            robot_pose)
-        self.log_pub.publish(log)
+        # log.data = formatlog('debug',
+        #     self.name,
+        #     'simulation',
+        #     'robot-pose',
+        #     robot_pose)
+        logdata = {
+                'level': 'info',
+                'entity': self.name,
+                'content': robot_pose
+            }
+        self.log_pub.publish(json.dumps(logdata))
 
     def add_to_simulation(self, x=-19, y=-3, z=0,
                           x_rot=0, y_rot=0, z_rot=0,

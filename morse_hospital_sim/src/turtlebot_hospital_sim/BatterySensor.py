@@ -1,5 +1,6 @@
 import rospy
 import os
+import json
 from threading import Timer
 from morse.builder import *
 from std_msgs.msg import String
@@ -47,13 +48,23 @@ class BatterySensor:
             rospy.logwarn(f"{self.parent} waiting for clock...")
         rospy.logwarn(f"{self.parent} setting up battery module...")
         self.timer = rospy.Timer(rospy.Duration(1), self.update_charge)
-        self.logtimer = rospy.Timer(rospy.Duration(5), self.update_log)
+        self.logtimer = rospy.Timer(rospy.Duration(15), self.update_log)
 
     def update_log(self, event):
         if self.parent == os.environ['CHOSE_ROBOT']:
             log = String()
-            log.data = f'{self.parent}_battery_level={self.percentage}'
-            self.log_pub.publish(log)
+            log.data = '{}-battery-level={:02.2f}%'.format(self.parent, self.percentage*100)
+            content = {
+                'battery-level': '{:02.2f}%'.format(self.percentage*100)
+            }
+            logdata = {
+                'level': 'info',
+                'entity': self.parent,
+                'content': {
+                    'battery-level': '{:02.2f}%'.format(self.percentage*100)
+                }
+            }
+            self.log_pub.publish(json.dumps(logdata))
 
     def update_charge(self, event):
         msg = BatteryState()
