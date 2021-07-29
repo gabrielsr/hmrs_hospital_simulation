@@ -1,5 +1,5 @@
-
 from morse.builder import *
+import json
 from turtlebot_hospital_sim.ItemExchanger import ItemExchanger
 from std_msgs.msg import String
 import rospy
@@ -40,6 +40,16 @@ class Nurse(Human):
             'sync',
             'wait-message',
             '(status=message-received)')
+        content = {
+            'skill': 'wait-message',
+            'status': 'message-received'
+        }
+        logdata = {
+            'level': 'info',
+            'entity': 'nurse',
+            'content': content
+        }
+        log.data = json.dumps(logdata)
         print("NURSE")
         print(log.data)
         print(com_data.data)
@@ -75,6 +85,16 @@ class Nurse(Human):
             'sync',
             'received-request',
             '(status=sending-request)')
+        content = {
+            'skill': 'athentication-request',
+            'status': 'message-received'
+        }
+        logdata = {
+            'level': 'info',
+            'entity': 'nurse',
+            'content': content
+        }
+        log.data = json.dumps(logdata)
         self.pub_log.publish(log)
         rate = rospy.Rate(.5)
         for i in range(0,10):
@@ -87,4 +107,14 @@ class Nurse(Human):
             'sync',
             'request-sent',
             '(status=waiting)')
+        content = {
+            'skill': 'athentication-sent',
+            'status': 'waiting'
+        }
+        logdata = {
+            'level': 'info',
+            'entity': 'nurse',
+            'content': content
+        }
+        log.data = json.dumps(logdata)
         self.pub_log.publish(log)

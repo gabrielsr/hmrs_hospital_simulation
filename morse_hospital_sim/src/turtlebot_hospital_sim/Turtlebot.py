@@ -90,7 +90,8 @@ class Turtlebot(Pioneer3DX):
                 'entity': self.name,
                 'content': robot_pose
             }
-        self.log_pub.publish(json.dumps(logdata))
+        log.data = json.dumps(logdata)
+        self.log_pub.publish(log)
 
     def add_to_simulation(self, x=-19, y=-3, z=0,
                           x_rot=0, y_rot=0, z_rot=0,

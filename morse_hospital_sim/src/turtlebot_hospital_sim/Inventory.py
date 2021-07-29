@@ -2,6 +2,7 @@ from morse.builder import *
 from std_msgs.msg import String
 from turtlebot_hospital_sim.ItemExchanger import ItemExchanger
 import rospy
+import json
 
 PATH = "/".join(__file__.split("/")[:-3])
 
@@ -45,6 +46,16 @@ class Inventory:
             'sync',
             'wait-sample',
             '(status=sample-received)')
+        content = {
+            'skill': 'wait-sample',
+            'status': 'sample-received'
+        }
+        logdata = {
+            'level': 'info',
+            'entity': 'nurse',
+            'content': content
+        }
+        log.data = json.dumps(logdata)
         self.logger_pub.publish(log)
         # rospy.loginfo(self.name+": received "+msg.data)
         # self.logger_pub.publish(msg)

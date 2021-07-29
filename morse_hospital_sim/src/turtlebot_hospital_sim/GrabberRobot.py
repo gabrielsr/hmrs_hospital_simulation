@@ -1,3 +1,4 @@
+import json
 import rospy
 from morse.builder import *
 from turtlebot_hospital_sim.Turtlebot import Turtlebot
@@ -57,6 +58,16 @@ class GrabberRobot(FakeRobot):
         print(log.data)
         print(com_data.data)
         print(self.name)
+        content = {
+            'skill': 'wait-sample',
+            'status': 'sample-received'
+        }
+        logdata = {
+            'level': 'info',
+            'entity': self.name,
+            'content': content
+        }
+        log.data = json.dumps(logdata)
         self.pub_log.publish(log)
         self.pub_invent.publish(str(log))
         pub_str = String()
