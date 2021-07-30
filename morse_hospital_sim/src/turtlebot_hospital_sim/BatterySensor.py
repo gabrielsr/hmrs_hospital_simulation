@@ -79,7 +79,7 @@ class BatterySensor:
 
         msg.charge = self.charge - self.discharge_rate_ah if self.discharge_rate_ah != 0 else self.charge - self.discharge_rate_percentage*self.capacity
         msg.percentage = self.charge/self.capacity
-        rospy.logwarn(f"{self.parent} updating charge battery {msg.percentage*100}%...")
+        # rospy.logwarn(f"{self.parent} updating charge battery {msg.percentage*100}%...")
         self.battery_pub.publish(msg)
         self.charge = msg.charge
         self.percentage = msg.percentage
