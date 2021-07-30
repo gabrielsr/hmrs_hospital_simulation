@@ -32,7 +32,7 @@ class Nurse(Human):
     def comms(self, com_data):
         pub_str = String()
         pub_str.data = "r1"
-        self.sub_comms_new = rospy.Subscriber(f"{pub_str.data}/comms", String, self.placeholder)
+        self.sub_comms_new = rospy.Subscriber(f"{self.name}/comms", String, self.placeholder)
         rospy.logwarn(com_data)
         log = String()
         log.data = formatlog('info',
@@ -56,7 +56,7 @@ class Nurse(Human):
         print("NURSE")
         self.pub_log.publish(log)
         # if com_data.data == "Open Drawer":
-        self.pub_comms = rospy.Publisher(f"{pub_str.data}/comms", String, queue_size=5)
+        self.pub_comms = rospy.Publisher(f"{self.name}/comms", String, queue_size=5)
         print(pub_str.data)
         rate = rospy.Rate(.5)
         for i in range(0,5):
