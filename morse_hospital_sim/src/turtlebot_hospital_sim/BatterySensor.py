@@ -46,6 +46,7 @@ class BatterySensor:
     def set_ros_timer(self):
         while rospy.get_time() == 0:
             rospy.logwarn(f"{self.parent} waiting for clock...")
+            rospy.sleep(1)
         rospy.logwarn(f"{self.parent} setting up battery module...")
         self.timer = rospy.Timer(rospy.Duration(1), self.update_charge)
         self.logtimer = rospy.Timer(rospy.Duration(15), self.update_log)

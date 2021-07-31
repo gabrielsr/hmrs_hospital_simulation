@@ -58,7 +58,7 @@ class Turtlebot(Pioneer3DX):
     def set_ros_timer(self):
         while rospy.get_time() == 0:
             rospy.logwarn(f"{self.name} waiting for clock...")
-        rospy.logwarn(f"{self.name} setting up battery module...")
+            rospy.sleep(1)
         self.timer = rospy.Timer(rospy.Duration(15), self.log_robot_pose)
 
     def log_robot_pose(self, event):
