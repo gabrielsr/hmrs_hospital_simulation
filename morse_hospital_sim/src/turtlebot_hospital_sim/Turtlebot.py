@@ -2,6 +2,7 @@ import json
 import rospy
 import geometry_msgs.msg
 from morse.builder import *
+from morse.core.blenderapi import persistantstorage
 from threading import Timer
 from std_msgs.msg import String
 from turtlebot_hospital_sim.BatterySensor import BatterySensor
@@ -51,11 +52,14 @@ class Turtlebot(Pioneer3DX):
         self.curr_pose = geometry_msgs.msg.PoseStamped()
         self.pose_sub = rospy.Subscriber(f"/{self.name}/pose", geometry_msgs.msg.PoseStamped, self.save_pose)
         self.log_pub = rospy.Publisher(f"/log", String, queue_size=1)
-
-        self.thr_timer = Timer(30, self.set_ros_timer)
-        self.thr_timer.start()
-
+        
     def set_ros_timer(self):
+        name = 'morse'
+        morse_ps = persistantstorage() # dict
+        if 'node_instance' in morse_ps:
+            name = 'morse_%s' % morse_ps.node_instance.node_name
+        rospy.init_node(name, disable_signals=True)
+
         while rospy.get_time() == 0:
             rospy.logwarn(f"{self.name} waiting for clock...")
             rospy.sleep(1)
@@ -109,6 +113,8 @@ class Turtlebot(Pioneer3DX):
                         WheelRLName = "None", WheelRRName = "None",
                         CasterWheelName = "CasterWheel", 
                         FixTurningSpeed = 0.52)
+        self.thr_timer = Timer(30, self.set_ros_timer)
+        self.thr_timer.start()
 
     def save_pose(self, msg):
         self.curr_pose = msg

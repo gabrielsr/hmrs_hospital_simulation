@@ -44,6 +44,12 @@ class BatterySensor:
         self.thr_timer.start()
 
     def set_ros_timer(self):
+        name = 'morse'
+        morse_ps = persistantstorage() # dict
+        if 'node_instance' in morse_ps:
+            name = 'morse_%s' % morse_ps.node_instance.node_name
+        rospy.init_node(name, disable_signals=True)
+
         while rospy.get_time() == 0:
             rospy.logwarn(f"{self.parent} waiting for clock...")
             rospy.sleep(1)
