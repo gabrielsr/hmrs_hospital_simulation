@@ -45,6 +45,9 @@ class GrabberRobot(FakeRobot):
         self.pose.add_interface('ros', topic=f"{self.name}/pose", frame_id="map")
 
     def comms(self, com_data):
+        to_send_data = 'r1'
+        if com_data.data == to_send_data:
+            return
         rospy.logwarn(com_data)
         log = String()
         # log.data = self.name + ": received sample from "+str(com_data)+" at "+str(rospy.get_rostime())
@@ -71,7 +74,7 @@ class GrabberRobot(FakeRobot):
         self.pub_log.publish(log)
         self.pub_invent.publish(str(log))
         pub_str = String()
-        pub_str.data = "r1"
+        pub_str.data = to_send_data
         self.pub_comms = rospy.Publisher(f"{self.name}/comms", String, queue_size=5)
         print(pub_str.data)
         rate = rospy.Rate(.5)
@@ -80,4 +83,10 @@ class GrabberRobot(FakeRobot):
             self.pub_comms.publish(pub_str)
             rate.sleep()
         pub_str.data = "r1 reached goal"
+        logdata = {
+            'level': 'debug',
+            'entity': self.name,
+            'content': pub_str.data
+        }
+        log.data = json.dumps(logdata)
         self.pub_invent.publish(pub_str)

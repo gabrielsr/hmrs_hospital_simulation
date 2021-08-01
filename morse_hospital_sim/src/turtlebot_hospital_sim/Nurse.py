@@ -32,7 +32,9 @@ class Nurse(Human):
     def comms(self, com_data):
         pub_str = String()
         pub_str.data = "r1"
-        self.sub_comms_new = rospy.Subscriber(f"{self.name}/comms", String, self.placeholder)
+        if com_data.data == pub_str.data:
+            return
+        # self.sub_comms_new = rospy.Subscriber(f"{self.name}/comms", String, self.placeholder)
         rospy.logwarn(com_data)
         log = String()
         log.data = formatlog('info',
