@@ -57,7 +57,7 @@ class Turtlebot(Pioneer3DX):
         name = 'morse'
         morse_ps = persistantstorage() # dict
         if not 'node_instance' in morse_ps:
-            name = 'morse_%s' % morse_ps.node_instance.node_name
+            # name = 'morse_%s' % morse_ps.node_instance.node_name
             rospy.init_node(name, disable_signals=True)
         while rospy.get_time() == 0:
             rospy.logwarn(f"{self.name} waiting for clock...")
