@@ -3,6 +3,7 @@ import os
 import json
 from threading import Timer
 from morse.builder import *
+from morse.core.blenderapi import persistantstorage
 from std_msgs.msg import String
 from sensor_msgs.msg import BatteryState
 from geometry_msgs.msg import Twist
