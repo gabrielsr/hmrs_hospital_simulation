@@ -40,16 +40,20 @@ class BatterySensor:
         self.log_pub = rospy.Publisher(f"/log", String, queue_size=1)
         self.vel_pub = rospy.Publisher(f"{self.parent}/cmd_vel", Twist, queue_size=1)
 
-        self.thr_timer = Timer(60, self.set_ros_timer)
+        self.thr_timer = Timer(30, self.set_ros_timer)
         self.thr_timer.start()
 
     def set_ros_timer(self):
-        while rospy.get_time() == 0:
-            rospy.logwarn(f"{self.parent} waiting for clock...")
-            rospy.sleep(1)
-        rospy.logwarn(f"{self.parent} setting up battery module...")
-        self.timer = rospy.Timer(rospy.Duration(1), self.update_charge)
-        self.logtimer = rospy.Timer(rospy.Duration(15), self.update_log)
+        try:
+            while rospy.get_time() == 0:
+                rospy.logwarn(f"{self.parent} waiting for clock...")
+                rospy.sleep(1)
+            rospy.logwarn(f"{self.parent} setting up battery module...")
+            self.timer = rospy.Timer(rospy.Duration(1), self.update_charge)
+            self.logtimer = rospy.Timer(rospy.Duration(15), self.update_log)
+        except:
+            self.thr_timer = Timer(30, self.set_ros_timer)
+            self.thr_timer.start()
 
     def update_log(self, event):
         if self.parent == os.environ['CHOSE_ROBOT']:

@@ -51,12 +51,16 @@ class Turtlebot(Pioneer3DX):
         self.curr_pose = geometry_msgs.msg.PoseStamped()
         self.pose_sub = rospy.Subscriber(f"/{self.name}/pose", geometry_msgs.msg.PoseStamped, self.save_pose)
         self.log_pub = rospy.Publisher(f"/log", String, queue_size=1)
-        
+
     def set_ros_timer(self):
-        while rospy.get_time() == 0:
-            rospy.logwarn(f"{self.name} waiting for clock...")
-            rospy.sleep(1)
-        self.timer = rospy.Timer(rospy.Duration(15), self.log_robot_pose)
+        try:
+            while rospy.get_time() == 0:
+                rospy.logwarn(f"{self.name} waiting for clock...")
+                rospy.sleep(1)
+            self.timer = rospy.Timer(rospy.Duration(15), self.log_robot_pose)
+        except:
+            self.thr_timer = Timer(30, self.set_ros_timer)
+            self.thr_timer.start()
 
     def log_robot_pose(self, event):
         quaternion = (
@@ -106,7 +110,7 @@ class Turtlebot(Pioneer3DX):
                         WheelRLName = "None", WheelRRName = "None",
                         CasterWheelName = "CasterWheel", 
                         FixTurningSpeed = 0.52)
-        self.thr_timer = Timer(60, self.set_ros_timer)
+        self.thr_timer = Timer(30, self.set_ros_timer)
         self.thr_timer.start()
 
     def save_pose(self, msg):
