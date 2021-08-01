@@ -56,10 +56,9 @@ class Turtlebot(Pioneer3DX):
     def set_ros_timer(self):
         name = 'morse'
         morse_ps = persistantstorage() # dict
-        if 'node_instance' in morse_ps:
+        if not 'node_instance' in morse_ps:
             name = 'morse_%s' % morse_ps.node_instance.node_name
-        rospy.init_node(name, disable_signals=True)
-
+            rospy.init_node(name, disable_signals=True)
         while rospy.get_time() == 0:
             rospy.logwarn(f"{self.name} waiting for clock...")
             rospy.sleep(1)
@@ -113,7 +112,7 @@ class Turtlebot(Pioneer3DX):
                         WheelRLName = "None", WheelRRName = "None",
                         CasterWheelName = "CasterWheel", 
                         FixTurningSpeed = 0.52)
-        self.thr_timer = Timer(30, self.set_ros_timer)
+        self.thr_timer = Timer(60, self.set_ros_timer)
         self.thr_timer.start()
 
     def save_pose(self, msg):

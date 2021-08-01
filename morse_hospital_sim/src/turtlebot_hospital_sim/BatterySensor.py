@@ -41,7 +41,7 @@ class BatterySensor:
         self.log_pub = rospy.Publisher(f"/log", String, queue_size=1)
         self.vel_pub = rospy.Publisher(f"{self.parent}/cmd_vel", Twist, queue_size=1)
 
-        self.thr_timer = Timer(30, self.set_ros_timer)
+        self.thr_timer = Timer(60, self.set_ros_timer)
         self.thr_timer.start()
 
     def set_ros_timer(self):
@@ -49,7 +49,7 @@ class BatterySensor:
         morse_ps = persistantstorage() # dict
         if 'node_instance' in morse_ps:
             name = 'morse_%s' % morse_ps.node_instance.node_name
-        rospy.init_node(name, disable_signals=True)
+            rospy.init_node(name, disable_signals=True)
 
         while rospy.get_time() == 0:
             rospy.logwarn(f"{self.parent} waiting for clock...")
